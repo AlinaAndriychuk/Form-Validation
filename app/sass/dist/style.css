@@ -1,0 +1,104 @@
+body {
+  display: flex;
+  height: 100vh;
+  margin: 0;
+  font-family: "Arial", sans-serif;
+}
+
+.form {
+  box-sizing: border-box;
+  margin: auto;
+  width: 400px;
+  color: #35665d;
+  border-radius: 15px;
+  box-shadow: 1px 1px 10px #82ada6;
+}
+
+.form__title {
+  margin: 0;
+  padding: 10px 0;
+  text-align: center;
+  background-color: #d9fff6;
+  border-radius: 15px 15px 0 0;
+}
+
+.form__block {
+  position: relative;
+  margin: 0 auto;
+  width: fit-content;
+  font-size: 20px;
+}
+
+.form__label {
+  display: block;
+  padding: 20px 0 0;
+  letter-spacing: 0.5px;
+}
+
+.form__text {
+  margin: 0 0 5px;
+}
+
+.form__input {
+  padding: 10px;
+  width: 260px;
+  color: #35665d;
+  font-size: inherit;
+  border: 2px solid #82ada6;
+}
+
+.form__input:focus {
+  background-color: #f0fffb;
+  outline-color: #35665d;
+}
+
+.form__input::placeHolder {
+  color: #82ada6;
+}
+
+.form__submit {
+  display: inline-block;
+  margin: 40px 0 20px 58px;
+  padding: 12.4px 40px;
+  color: #35665d;
+  font-size: inherit;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background-color: #d9fff6;
+  border: 2px solid #82ada6;
+  cursor: pointer;
+}
+
+.is-empty {
+  border-color: #ff0055;
+}
+
+.is-empty::placeHolder {
+  color: #fab5ba;
+}
+
+.is-emptyLabel {
+  color: #ff0055;
+}
+
+.is-emptyLabel::after {
+  box-sizing: border-box;
+  position: absolute;
+  bottom: -42px;
+  left: 0;
+  padding: 10px 20px;
+  width: fit-content;
+  z-index: 5;
+  content: "Fill the form";
+  color: #35665d;
+  font-size: 16px;
+  background-color: #fff;
+  border: 1px #82ada6 solid;
+  border-radius: 0 5px 5px 5px;
+  opacity: 0;
+  transition-duration: 0.3s;
+}
+
+.form__block:hover .is-emptyLabel::after {
+  opacity: 1;
+}

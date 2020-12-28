@@ -1,0 +1,117 @@
+$darkGreen: #35665d
+$gray: #82ada6
+$green: #d9fff6
+$lightGreen: #f8fffd
+$red: #ff0055
+$lightRed: #fab5ba
+  
+body
+  display: flex
+  height: 100vh
+  margin: 0
+
+  font-family: 'Arial', sans-serif
+
+.form
+  box-sizing: border-box
+  margin: auto
+  width: 400px
+
+  color: $darkGreen
+
+  border-radius: 15px
+  box-shadow: 1px 1px 10px $gray
+
+.form__title
+  margin: 0
+  padding: 10px 0
+
+  text-align: center
+
+  background-color: $green
+  border-radius: 15px 15px 0 0
+
+.form__block
+  position: relative
+  margin: 0 auto
+  width: fit-content
+
+  font-size: 20px
+
+.form__label
+  display: block
+  padding: 20px 0 0
+
+  letter-spacing: .5px
+
+.form__text
+  margin: 0 0 5px
+
+.form__input
+  padding: 10px
+  width: 260px
+
+  color: $darkGreen
+  font-size: inherit
+
+  border: 2px solid $gray
+
+.form__input:focus,
+.form__submit:focus
+  background-color: $lightGreen
+  outline-color: $darkGreen
+
+.form__input::placeHolder
+  color: $gray
+
+.form__submit
+  display: inline-block
+  margin: 40px 0 20px 58px
+  padding: 12.4px 40px
+
+  color: $darkGreen
+  font-size: inherit
+  letter-spacing: 1px
+  text-transform: uppercase
+
+  background-color: $green
+  border: 2px solid $gray
+
+  cursor: pointer
+
+.is-empty
+  background: url(../img/importance.png) no-repeat center right 5px
+  background-size: 35px
+  border-color: $red
+
+.is-empty:focus
+  background: $lightGreen
+
+.is-empty::placeHolder
+  color: $lightRed
+
+.is-empty:focus::placeHolder
+  color: $gray
+
+.is-emptyLabel
+  color: $red
+
+.is-emptyTitle
+  box-sizing: border-box
+  position: absolute
+  top: 81px
+  left: 0
+  padding: 10px 20px
+  width: fit-content
+  z-index: 5
+
+  color: $darkGreen
+  font-size: 16px
+  
+  display: none
+  background-color: #fff
+  border: 1px $gray solid
+  border-radius: 0 5px 5px 5px
+
+.form__block:hover .is-emptyTitle
+  display: block
