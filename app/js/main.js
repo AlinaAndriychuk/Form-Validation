@@ -6,30 +6,25 @@ class FormValidation {
     this.minPassword = config.password;
     this.password = this.form.querySelector('#passwordToValidate');
     this.email = this.form.querySelector('#emailToValidate');
+    this.phone = this.form.querySelector('#phoneToValidate');
     
-    this.addSubmitListener(this.form);
+    this.addListener(this.form);
   }
 
-  removeClass(elements, className) {
-    elements.forEach( elem => {
-      elem.classList.remove(className)
-    });
+  removeClass(element, className) {
+    element.classList.remove(className)
   }
 
-  removeElements(nodes) {
-    nodes.forEach( node => {
-      node.parentNode.removeChild(node);
-    });
+  removeElement(element) {
+    if (element) {
+      element.parentNode.removeChild(element);
+    }
   }
 
-  findEmptyClassElements(form) {
-    const labels = form.querySelectorAll('.is-emptyLabel');
-    const inputs = form.querySelectorAll('.is-empty');
-    const titles = form.querySelectorAll('.is-emptyTitle');
-    
-    this.removeClass(labels, 'is-emptyLabel');
-    this.removeClass(inputs, 'is-empty');
-    this.removeElements(titles);
+  findEmptyClassElement(field) {
+    this.removeClass(field.closest('label'), 'is-emptyLabel');
+    this.removeClass(field, 'is-empty');
+    this.removeElement(field.nextElementSibling);
   }
 
   addEmptyClass(field, content) {
@@ -46,48 +41,76 @@ class FormValidation {
     field.classList.add('is-empty');
   }
 
-  checkEmptyFields(fields) {
-    fields.forEach( field => {
-      if (field.value === '') {
-        this.addEmptyClass(field, 'Fill this form');
-      };
-    });
-  }
-
-  validateEmail(email) {
-    const emailValue = email.value;
-    if (emailValue === '') {
-      this.addEmptyClass(email, 'Fill this form');
-    } else if (!emailValue.includes('@')) {
-      this.addEmptyClass(email, 'Email must contain the "@" symbol. The "@" symbol is missing in the address "' + emailValue + '".');
-    } else if (emailValue.startsWith('@')) {
-      this.addEmptyClass(email, 'Enter part of the address before the "@" symbol. The Address "' + emailValue + '" is not complete.');
-    } else if (emailValue.endsWith('@')) {
-      this.addEmptyClass(email, 'Enter part of the address after the "@" symbol. The Address "' + emailValue + '" is not complete.');
-    } else if (emailValue.endsWith('.')) {
-      this.addEmptyClass(email, 'The invalid symbol position "." in the address "' + emailValue + '".');
+  checkEmptyField(field, context) {
+    if (field.value === '') {
+      context.addEmptyClass(field, 'Fill this form');
     };
   }
 
-  validatePassword(password, num) {
-    const passwordValue = password.value;
-    if (passwordValue === '') {
-      this.addEmptyClass(password, 'Fill this form');
-    } else if (passwordValue.split('').length < num) {
-      this.addEmptyClass(password, 'Password must have minimum ' + num + ' simbols.');
+  validateEmail(email, context) {
+    const emailValue = email.value;
+    const emailRegExp = /^[-a-z0-9!#$%&'*+/=?^_`{|}~]+(\.[-a-z0-9!#$%&'*+/=?^_`{|}~]+)*@([a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?\.)*(aero|arpa|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|[a-z][a-z])$/;
+    
+    if (emailValue === '') {
+      context.addEmptyClass(email, 'Fill this form');
+    } else if (!emailRegExp.test(emailValue)) {
+      context.addEmptyClass(email, 'Email is not correct');
     }
   }
 
-  addSubmitListener(form) {
-    form.addEventListener('submit', e => {
-      const fields = form.querySelectorAll('input');
-      e.preventDefault();
-      this.findEmptyClassElements(form);
+  validatePhone(phone, context) {
+    const phoneNumber = phone.value;
+    const phoneRegExp = /^\+[1-9]{1}[0-9]{3,14}$/;
+    if (phoneNumber === '') {
+      context.addEmptyClass(phone, 'Fill this form');
+    } else if (!phoneRegExp.test(phoneNumber)) {
+      context.addEmptyClass(phone, 'Phone number is not correct');
+    }
+  }
 
-      this.checkEmptyFields(fields);
-      this.validateEmail(this.email);
-      this.validatePassword(this.password, this.minPassword);
+  validatePassword(password, context) {
+    const passwordValue = password.value;
+
+    if (passwordValue === '') {
+      context.addEmptyClass(password, 'Fill this form');
+    } else if (passwordValue.split('').length < context.minPassword) {
+      context.addEmptyClass(password, 'Password must have minimum ' + context.minPassword + ' simbols.');
+    }
+  }
+
+  addBlurListener(element, f) {
+    element.addEventListener('blur', e => {
+      this.findEmptyClassElement(element);
+      f(element, this);
     });
+  }
+
+  addListener(form) {
+    const fields = form.querySelectorAll('.form__input');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      fields.forEach( field => {
+        this.findEmptyClassElement(field);
+      })
+      
+      fields.forEach( field => {
+        this.checkEmptyField(field, this);
+      })
+      
+      this.validateEmail(this.email, this);
+      this.validatePhone(this.phone, this);
+      this.validatePassword(this.password, this);
+    });
+
+    fields.forEach( field => {
+      this.addBlurListener(field, this.checkEmptyField);
+    });
+
+    this.addBlurListener(this.email, this.validateEmail);
+    this.addBlurListener(this.password, this.validatePassword);
+    this.addBlurListener(this.phone, this.validatePhone);
   }
 }
 
